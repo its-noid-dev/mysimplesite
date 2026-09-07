@@ -14,6 +14,13 @@ main {
   border-radius: 8px;
 }
 
+.quiet-footer {
+  margin: 28px auto 12px;
+  color: #4b4640;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
 .blog-page {
   max-width: 700px;
 }

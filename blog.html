@@ -3,8 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blog</title>
+  <title>Noid.DEV</title>
+  <link rel="icon" href="Noid.DEV.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
+  <script>
+    const randomTitles = [
+      "BOMBOCLAT",
+      "FeliciatheGOAT",
+      "Wenamechainasumma",
+      "I like, apples and bananas",
+      "Call me if you get lost!"
+    ];
+    const randomTitle = randomTitles[Math.floor(Math.random() * randomTitles.length)];
+    document.title = `Noid.DEV | ${randomTitle}`;
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("random-title").textContent = randomTitle;
+    });
+  </script>
 </head>
 <body>
   <main class="blog-page">
@@ -15,6 +30,7 @@
     <div id="content"></div>
     <button class="share-button" id="share-button" type="button">Share</button>
   </main>
+  <footer class="quiet-footer">You got title: <span id="random-title"></span></footer>
 
   <div class="share-popup" id="share-popup" hidden>
     <div class="share-backdrop" data-close-share></div>
