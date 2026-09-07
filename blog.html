@@ -13,7 +13,23 @@
     <h1 id="title">The start</h1>
     <p id="date">02-09-2026</p>
     <div id="content"></div>
+    <button class="share-button" id="share-button" type="button">Share</button>
   </main>
+
+  <div class="share-popup" id="share-popup" hidden>
+    <div class="share-backdrop" data-close-share></div>
+    <section class="share-panel" role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <button class="share-close" type="button" aria-label="Close share menu" data-close-share>&times;</button>
+      <h2 id="share-title">Share this blog</h2>
+      <div class="share-options">
+        <button type="button" data-share-action="copy">Copy link</button>
+        <button type="button" data-share-action="whatsapp">WhatsApp</button>
+        <button type="button" data-share-action="snapchat">Snapchat</button>
+        <button type="button" data-share-action="more">More sharing options</button>
+      </div>
+      <p class="share-status" id="share-status" aria-live="polite"></p>
+    </section>
+  </div>
 
   <script>
     const posts = {
@@ -83,6 +99,46 @@
           : `<p>${p}</p>`).join("") +
         (post.image ? `<div class="pics"><img src="${post.image}" alt=""></div>` : "");
     }
+
+    const sharePopup = document.getElementById("share-popup");
+    const shareTitle = document.getElementById("share-title");
+    const shareStatus = document.getElementById("share-status");
+    const shareUrl = window.location.href;
+
+    document.getElementById("share-button").addEventListener("click", () => {
+      shareTitle.textContent = `Share ${post.title}`;
+      shareStatus.textContent = "";
+      sharePopup.hidden = false;
+    });
+
+    document.querySelectorAll("[data-close-share]").forEach(element => {
+      element.addEventListener("click", () => {
+        sharePopup.hidden = true;
+      });
+    });
+
+    document.querySelectorAll("[data-share-action]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const message = `Check out this blog: ${shareUrl}`;
+
+        if (button.dataset.shareAction === "copy") {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            shareStatus.textContent = "Link copied!";
+          } catch {
+            shareStatus.textContent = "Copy failed. You can use More sharing options.";
+          }
+        } else if (button.dataset.shareAction === "whatsapp") {
+          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+        } else if (button.dataset.shareAction === "snapchat") {
+          window.open(`https://www.snapchat.com/scan?attachment=${encodeURIComponent(shareUrl)}`, "_blank");
+        } else if (navigator.share) {
+          await navigator.share({ title: shareTitle.textContent, url: shareUrl });
+        } else {
+          shareStatus.textContent = "More sharing options are not supported here.";
+        }
+      });
+    });
   </script>
 </body>
 </html>

@@ -69,6 +69,89 @@ p {
   padding: 10px;
 }
 
+.share-button,
+.share-options button,
+.share-close {
+  border: 1px solid #800482;
+  border-radius: 6px;
+  background: #800482;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.share-button {
+  margin-top: 10px;
+  padding: 8px 12px;
+}
+
+.share-button:hover,
+.share-options button:hover,
+.share-close:hover {
+  background: #a30aa7;
+}
+
+.share-popup[hidden] {
+  display: none;
+}
+
+.share-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.share-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 65%);
+}
+
+.share-panel {
+  position: relative;
+  width: min(100%, 340px);
+  padding: 20px;
+  border: 2px solid #38332c;
+  border-radius: 8px;
+  background: #1e1c19;
+  box-shadow: 0 12px 35px rgb(0 0 0 / 40%);
+}
+
+.share-panel h2 {
+  padding-right: 28px;
+}
+
+.share-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.share-options {
+  display: grid;
+  gap: 8px;
+}
+
+.share-options button {
+  padding: 10px;
+}
+
+.share-status {
+  min-height: 1.2em;
+  margin: 12px 0 0;
+  color: #d7c9a7;
+  text-align: center;
+}
+
 .pics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
