@@ -32,6 +32,21 @@ p {
   margin: 0 0 12px;
 }
 
+.rainbow-letter {
+  display: inline-block;
+  animation: rainbow-letter 2.4s linear infinite;
+  animation-delay: calc(var(--letter-index) * -0.12s);
+}
+
+@keyframes rainbow-letter {
+  0%, 100% { color: #ff4d6d; }
+  16% { color: #ff9f1c; }
+  33% { color: #ffe66d; }
+  50% { color: #56d364; }
+  66% { color: #4dabf7; }
+  83% { color: #c77dff; }
+}
+
 .info-box {
   margin-top: 20px;
   padding: 12px;

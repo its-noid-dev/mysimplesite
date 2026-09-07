@@ -46,17 +46,41 @@
           "Now i just need to survive french class 2 more days and its the weekend!"
         ],
         image: "https://cdn3.emoji.gg/emojis/84579-joobi-mewing-yellow.png"
+      },
+      "oopsies": {
+        title: "Oopsies...",
+        date: "07-09-2026",
+        text: [
+          "Hi everyone, uhm.... i don't know how to say this...",
+          "I shipped this site a few days ago.",
+          "And i waited, and waited, and waited, for days in the queue.",
+          "then i got a review, they liked my site!",
+          "But.... i forgot a readme.md file in my repo.",
+          "So i made it and reshipped, i hope i get accepted now."
+        ],
+        image: "https://tse2.mm.bing.net/th/id/OIP.sBDLmUsgvH23GkoOU3hjZwAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
       }
     };
 
     const params = new URLSearchParams(window.location.search);
     const post = posts[params.get("post") || "the-start"];
+    const rainbowLikedSite = true;
+
+    function rainbowPhrase(phrase) {
+      if (!rainbowLikedSite) return phrase;
+
+      return Array.from(phrase).map((letter, index) =>
+        `<span class="rainbow-letter" style="--letter-index: ${index}">${letter === " " ? "&nbsp;" : letter}</span>`
+      ).join("");
+    }
 
     if (post) {
       document.getElementById("title").textContent = post.title;
       document.getElementById("date").textContent = post.date;
       document.getElementById("content").innerHTML =
-        post.text.map(p => `<p>${p}</p>`).join("") +
+        post.text.map(p => p.includes("they liked my site!")
+          ? `<p>${p.replace("they liked my site!", rainbowPhrase("they liked my site!"))}</p>`
+          : `<p>${p}</p>`).join("") +
         (post.image ? `<div class="pics"><img src="${post.image}" alt=""></div>` : "");
     }
   </script>
