@@ -54,6 +54,46 @@ p {
   83% { color: #c77dff; }
 }
 
+.monday-white {
+  color: #fff;
+}
+
+.monday-light-red {
+  display: inline-block;
+  color: #ff6b81 !important;
+  animation: monday-shake-light 0.28s linear infinite;
+}
+
+.monday-red {
+  display: inline-block;
+  color: #f0445c;
+  animation: monday-shake-medium 0.18s linear infinite;
+}
+
+.monday-dark-red {
+  display: inline-block;
+  color: #8f1026;
+  animation: monday-shake-hard 0.1s linear infinite;
+}
+
+@keyframes monday-shake-light {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+@keyframes monday-shake-medium {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes monday-shake-hard {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
 .info-box {
   margin-top: 20px;
   padding: 12px;

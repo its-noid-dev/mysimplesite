@@ -6,6 +6,7 @@
   <title>Noid.DEV</title>
   <link rel="icon" href="Noid.DEV.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
+
   <script>
     const randomTitles = [
       "BOMBOCLAT",
@@ -14,35 +15,74 @@
       "I like, apples and bananas",
       "Call me if you get lost!"
     ];
-    const randomTitle = randomTitles[Math.floor(Math.random() * randomTitles.length)];
+
+    const randomTitle =
+      randomTitles[Math.floor(Math.random() * randomTitles.length)];
+
     document.title = `Noid.DEV | ${randomTitle}`;
+
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("random-title").textContent = randomTitle;
     });
   </script>
 </head>
+
 <body>
   <main class="blog-page">
     <a href="index.html">Back</a>
 
     <h1 id="title">The start</h1>
     <p id="date">02-09-2026</p>
+
     <div id="content"></div>
-    <button class="share-button" id="share-button" type="button">Share</button>
+
+    <button class="share-button" id="share-button" type="button">
+      Share
+    </button>
   </main>
-  <footer class="quiet-footer">You got title: <span id="random-title"></span></footer>
+
+  <footer class="quiet-footer">
+    You got title: <span id="random-title"></span>
+  </footer>
 
   <div class="share-popup" id="share-popup" hidden>
     <div class="share-backdrop" data-close-share></div>
-    <section class="share-panel" role="dialog" aria-modal="true" aria-labelledby="share-title">
-      <button class="share-close" type="button" aria-label="Close share menu" data-close-share>&times;</button>
+
+    <section
+      class="share-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="share-title"
+    >
+      <button
+        class="share-close"
+        type="button"
+        aria-label="Close share menu"
+        data-close-share
+      >
+        &times;
+      </button>
+
       <h2 id="share-title">Share this blog</h2>
+
       <div class="share-options">
-        <button type="button" data-share-action="copy">Copy link</button>
-        <button type="button" data-share-action="whatsapp">WhatsApp</button>
-        <button type="button" data-share-action="snapchat">Snapchat</button>
-        <button type="button" data-share-action="more">More sharing options</button>
+        <button type="button" data-share-action="copy">
+          Copy link
+        </button>
+
+        <button type="button" data-share-action="whatsapp">
+          WhatsApp
+        </button>
+
+        <button type="button" data-share-action="snapchat">
+          Snapchat
+        </button>
+
+        <button type="button" data-share-action="more">
+          More sharing options
+        </button>
       </div>
+
       <p class="share-status" id="share-status" aria-live="polite"></p>
     </section>
   </div>
@@ -57,8 +97,10 @@
           "I wasn't super exited for the new schoolyear, but i was happy to see my friends.",
           "This was my first blog, hope ya like it."
         ],
-        image: "https://tse4.mm.bing.net/th/id/OIP.1LYRZpvKfCrtrK3bxLjF3wHaFR?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        image:
+          "https://tse4.mm.bing.net/th/id/OIP.1LYRZpvKfCrtrK3bxLjF3wHaFR?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
       },
+
       "good-news": {
         title: "Good news!",
         date: "03-09-2026",
@@ -67,8 +109,10 @@
           "We were coding in STEAM class and i decided to propose a hackclub club to my teacher.",
           "He didn't know what a hackclub is, so i said i will mail all the info, so maybe, just maybe, we will have a hackclub at school!"
         ],
-        image: "https://www.pngmart.com/files/22/Meme-Emojis-PNG.png"
+        image:
+          "https://www.pngmart.com/files/22/Meme-Emojis-PNG.png"
       },
+
       "its-thursday": {
         title: "It's thursday!",
         date: "03-09-2026",
@@ -77,8 +121,10 @@
           "First week of school is already almost over!",
           "Now i just need to survive french class 2 more days and its the weekend!"
         ],
-        image: "https://cdn3.emoji.gg/emojis/84579-joobi-mewing-yellow.png"
+        image:
+          "https://cdn3.emoji.gg/emojis/84579-joobi-mewing-yellow.png"
       },
+
       "oopsies": {
         title: "Oopsies...",
         date: "07-09-2026",
@@ -90,71 +136,194 @@
           "But.... i forgot a readme.md file in my repo.",
           "So i made it and reshipped, i hope i get accepted now."
         ],
-        image: "https://tse2.mm.bing.net/th/id/OIP.sBDLmUsgvH23GkoOU3hjZwAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        image:
+          "https://tse2.mm.bing.net/th/id/OIP.sBDLmUsgvH23GkoOU3hjZwAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+
+      "it-s-monday-again": {
+        title: "It's monday AGAIN!",
+        date: "07-09-2026",
+        text: [
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "MONDAY SUCKS.",
+          "I just want to sleep and play games all day.",
+          "But NO, i have to go to school and learn FRENCH and STUDY... AAAAAAAAAAAAAAAAAAAAAAAAAA.."
+        ]
       }
     };
 
     const params = new URLSearchParams(window.location.search);
-    const post = posts[params.get("post") || "the-start"];
+
+    const post =
+      posts[params.get("post") || "the-start"];
+
     const rainbowLikedSite = true;
 
     function rainbowPhrase(phrase) {
       if (!rainbowLikedSite) return phrase;
 
-      return Array.from(phrase).map((letter, index) =>
-        `<span class="rainbow-letter" style="--letter-index: ${index}">${letter === " " ? "&nbsp;" : letter}</span>`
-      ).join("");
+      return Array.from(phrase)
+        .map((letter, index) =>
+          `<span class="rainbow-letter" style="--letter-index: ${index}">${
+            letter === " " ? "&nbsp;" : letter
+          }</span>`
+        )
+        .join("");
+    }
+
+    function mondayText(lines) {
+      const coloredWords = [
+        ["SUCKS.", "monday-white"],
+        ["sleep", "monday-light-red"],
+        ["games", "monday-light-red"],
+        ["NO", "monday-red"],
+        ["school", "monday-red"],
+        ["FRENCH", "monday-dark-red"],
+        ["STUDY", "monday-dark-red"]
+      ];
+
+      return lines
+        .map((line, lineIndex) => {
+
+          /*
+           * BELANGRIJK:
+           * We gebruiken A{3,} in plaats van A+
+           *
+           * A+ zou elke losse A pakken.
+           * Daardoor werd de A in MONDAY ook rood.
+           *
+           * A{3,} pakt alleen reeksen van 3 of meer A's.
+           */
+          let coloredLine = line.replace(/A{3,}/g, match => {
+            const aColor =
+              lineIndex === 0
+                ? "monday-white"
+                : "monday-dark-red";
+
+            return `<span class="${aColor}">${match}</span>`;
+          });
+
+          coloredWords.forEach(([word, className]) => {
+            coloredLine = coloredLine.replace(
+              word,
+              `<span class="${className}">${word}</span>`
+            );
+          });
+
+          return `<p>${coloredLine}</p>`;
+        })
+        .join("");
     }
 
     if (post) {
       document.getElementById("title").textContent = post.title;
       document.getElementById("date").textContent = post.date;
+
       document.getElementById("content").innerHTML =
-        post.text.map(p => p.includes("they liked my site!")
-          ? `<p>${p.replace("they liked my site!", rainbowPhrase("they liked my site!"))}</p>`
-          : `<p>${p}</p>`).join("") +
-        (post.image ? `<div class="pics"><img src="${post.image}" alt=""></div>` : "");
+        post.title === "It's monday AGAIN!"
+          ? mondayText(post.text)
+          : post.text
+              .map(p =>
+                p.includes("they liked my site!")
+                  ? `<p>${p.replace(
+                      "they liked my site!",
+                      rainbowPhrase("they liked my site!")
+                    )}</p>`
+                  : `<p>${p}</p>`
+              )
+              .join("") +
+            (post.image
+              ? `<div class="pics">
+                   <img src="${post.image}" alt="">
+                 </div>`
+              : "");
     }
 
-    const sharePopup = document.getElementById("share-popup");
-    const shareTitle = document.getElementById("share-title");
-    const shareStatus = document.getElementById("share-status");
-    const shareUrl = window.location.href;
+    const sharePopup =
+      document.getElementById("share-popup");
 
-    document.getElementById("share-button").addEventListener("click", () => {
-      shareTitle.textContent = `Share ${post.title}`;
-      shareStatus.textContent = "";
-      sharePopup.hidden = false;
-    });
+    const shareTitle =
+      document.getElementById("share-title");
 
-    document.querySelectorAll("[data-close-share]").forEach(element => {
-      element.addEventListener("click", () => {
-        sharePopup.hidden = true;
+    const shareStatus =
+      document.getElementById("share-status");
+
+    const shareUrl =
+      window.location.href;
+
+    document
+      .getElementById("share-button")
+      .addEventListener("click", () => {
+        shareTitle.textContent = `Share ${post.title}`;
+        shareStatus.textContent = "";
+        sharePopup.hidden = false;
       });
-    });
 
-    document.querySelectorAll("[data-share-action]").forEach(button => {
-      button.addEventListener("click", async () => {
-        const message = `Check out this blog: ${shareUrl}`;
+    document
+      .querySelectorAll("[data-close-share]")
+      .forEach(element => {
+        element.addEventListener("click", () => {
+          sharePopup.hidden = true;
+        });
+      });
 
-        if (button.dataset.shareAction === "copy") {
-          try {
-            await navigator.clipboard.writeText(shareUrl);
-            shareStatus.textContent = "Link copied!";
-          } catch {
-            shareStatus.textContent = "Copy failed. You can use More sharing options.";
+    document
+      .querySelectorAll("[data-share-action]")
+      .forEach(button => {
+
+        button.addEventListener("click", async () => {
+
+          const message =
+            `Check out this blog: ${shareUrl}`;
+
+          if (
+            button.dataset.shareAction === "copy"
+          ) {
+            try {
+              await navigator.clipboard.writeText(
+                shareUrl
+              );
+
+              shareStatus.textContent =
+                "Link copied!";
+
+            } catch {
+              shareStatus.textContent =
+                "Copy failed. You can use More sharing options.";
+            }
+
+          } else if (
+            button.dataset.shareAction === "whatsapp"
+          ) {
+
+            window.open(
+              `https://wa.me/?text=${encodeURIComponent(message)}`,
+              "_blank"
+            );
+
+          } else if (
+            button.dataset.shareAction === "snapchat"
+          ) {
+
+            window.open(
+              `https://www.snapchat.com/scan?attachment=${encodeURIComponent(shareUrl)}`,
+              "_blank"
+            );
+
+          } else if (navigator.share) {
+
+            await navigator.share({
+              title: shareTitle.textContent,
+              url: shareUrl
+            });
+
+          } else {
+
+            shareStatus.textContent =
+              "More sharing options are not supported here.";
           }
-        } else if (button.dataset.shareAction === "whatsapp") {
-          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-        } else if (button.dataset.shareAction === "snapchat") {
-          window.open(`https://www.snapchat.com/scan?attachment=${encodeURIComponent(shareUrl)}`, "_blank");
-        } else if (navigator.share) {
-          await navigator.share({ title: shareTitle.textContent, url: shareUrl });
-        } else {
-          shareStatus.textContent = "More sharing options are not supported here.";
-        }
+        });
       });
-    });
   </script>
 </body>
 </html>
