@@ -28,6 +28,16 @@
 </head>
 
 <body>
+  <button class="site-clock" id="site-clock" type="button" aria-label="Switch clock display">
+    <span class="analog-clock" aria-hidden="true">
+      <span class="clock-hand clock-hour"></span>
+      <span class="clock-hand clock-minute"></span>
+      <span class="clock-hand clock-second"></span>
+      <span class="clock-center"></span>
+    </span>
+    <span class="digital-clock" aria-live="polite"></span>
+  </button>
+
   <main class="blog-page">
     <a href="index.html">Back</a>
 
@@ -84,6 +94,28 @@
       </div>
 
       <p class="share-status" id="share-status" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <div class="game-popup" id="game-popup" hidden>
+    <div class="game-backdrop" data-close-game></div>
+    <section class="game-panel" role="dialog" aria-modal="true" aria-labelledby="game-title">
+      <button class="game-close" type="button" aria-label="Close game" data-close-game>&times;</button>
+      <p class="game-helper game-tap-helper">Hover over the tap to fill the mug</p>
+      <h1 id="game-title">Fill the mug <span id="game-target">0</span>%</h1>
+      <h2 id="game-percent"></h2>
+      <h3 id="game-result"></h3>
+      <div class="game-tap-container">
+        <div class="game-tap"></div>
+        <div class="game-handle"></div>
+        <div class="game-pour"></div>
+      </div>
+      <div class="game-mug-container">
+        <div class="game-mug">
+          <div class="game-beer"></div>
+        </div>
+      </div>
+      <p class="game-helper game-mug-helper">Click the mug to reset</p>
     </section>
   </div>
 
@@ -160,13 +192,59 @@
           "needed to ship it).",
           "So yeah, another hackclubber in the community!"
         ]
+      },
+      "games1": {
+        title: "Games!",
+        date: "09-09-2026",
+        releaseAt: "2026-09-09T12:00:00",
+        releaseMode: "revealable",
+        game: true,
+        text: [
+          "So, i decided to test out adding a game to the site!",
+          "I made a simple game and you can play it by clicking",
+          "I will be adding more games in the future, so stay tuned!"
+        ]
+      },
+      "help-me-decide": {
+        title: "Help me decide!",
+        date: "08-09-2026",
+        releaseAt: "2026-09-08T18:00:00",
+        releaseMode: "revealable",
+        pollEndsAt: "2026-09-10T18:00:00",
+        pollOptions: [
+          "Put ads on the site to earn money",
+          "Ask hackclub for funding",
+          "Ask for donations on the site",
+          "All of the above",
+          "Ask funding and if it doesn't work, ask for donations",
+          "Ask funding and if it doesn't work, post ads on the site"
+
+        ],
+        text: [
+          "So, you read the title, please help me decide!",
+          "I am thinking about hosting this site along with other projects on my own domain.",
+          "But... I don't really have any money to do so, so i need to know.",
+          "What should i do?",
+        ]
       }
+
     };
 
     const params = new URLSearchParams(window.location.search);
 
     const post =
       posts[params.get("post") || "the-start"];
+
+    function parseBlogDate(dateText) {
+      const [day, month, year] = dateText.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function getReleaseDate(post) {
+      return post.releaseAt
+        ? new Date(post.releaseAt)
+        : parseBlogDate(post.date);
+    }
 
     const rainbowLikedSite = true;
 
@@ -226,34 +304,206 @@
         .join("");
     }
 
+    function pollKey() {
+      return `poll-votes-${params.get("post") || "the-start"}`;
+    }
+
+    function readPollVotes() {
+      try {
+        return JSON.parse(localStorage.getItem(pollKey())) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function pollCountdown(milliseconds) {
+      const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds left`;
+    }
+
+    function renderPoll() {
+      if (!post.pollOptions) return "";
+
+      const votes = readPollVotes();
+      const totalVotes = post.pollOptions.reduce(
+        (total, option) => total + (votes[option] || 0),
+        0
+      );
+      const pollEnded = new Date(post.pollEndsAt) <= new Date();
+
+      return `<section class="poll" aria-labelledby="poll-title">
+        <h2 id="poll-title">Vote here</h2>
+        <p class="poll-countdown" data-poll-countdown></p>
+        <div class="poll-options">
+          ${post.pollOptions.map(option => {
+            const optionVotes = votes[option] || 0;
+            const percentage = totalVotes
+              ? Math.round((optionVotes / totalVotes) * 100)
+              : 0;
+            return `<button class="poll-option" type="button" data-poll-option="${option}"${pollEnded ? " disabled" : ""}>
+              <span class="poll-option-label">${option}</span>
+              <span class="poll-bar"><span style="width: ${percentage}%"></span></span>
+              <span class="poll-count">${optionVotes} votes (${percentage}%)</span>
+            </button>`;
+          }).join("")}
+        </div>
+        <p class="poll-total">${totalVotes} total votes</p>
+      </section>`;
+    }
+
+    function updatePoll() {
+      const poll = document.querySelector(".poll");
+      if (!poll || !post.pollEndsAt) return;
+
+      const remaining = new Date(post.pollEndsAt) - new Date();
+      poll.querySelector("[data-poll-countdown]").textContent = remaining > 0
+        ? `Poll ends in ${pollCountdown(remaining)}`
+        : "Poll closed";
+
+      if (remaining <= 0) {
+        poll.querySelectorAll("[data-poll-option]").forEach(button => {
+          button.disabled = true;
+        });
+      }
+    }
+
+    function attachPollEvents() {
+      document.querySelectorAll("[data-poll-option]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (post.pollEndsAt && new Date(post.pollEndsAt) <= new Date()) return;
+
+          const votes = readPollVotes();
+          const option = button.dataset.pollOption;
+          votes[option] = (votes[option] || 0) + 1;
+          localStorage.setItem(pollKey(), JSON.stringify(votes));
+          document.querySelector(".poll").outerHTML = renderPoll();
+          attachPollEvents();
+          updatePoll();
+        });
+      });
+    }
+
+    const postIsLocked = post && getReleaseDate(post) > new Date();
+
     if (post) {
       document.getElementById("title").textContent = post.title;
       document.getElementById("date").textContent = post.date;
 
-      document.getElementById("content").innerHTML =
-        post.title === "It's monday AGAIN!"
-          ? mondayText(post.text)
-          : post.text
-              .map(p =>
-                p.includes("they liked my site!")
-                  ? `<p>${p.replace(
-                      "they liked my site!",
-                      rainbowPhrase("they liked my site!")
-                    )}</p>`
-                  : p.includes("another hackclubber in the community!")
+      if (postIsLocked) {
+        document.getElementById("content").innerHTML =
+          `<p class="locked-post">This post is scheduled and unlocks soon.</p>`;
+        document.getElementById("date").hidden = true;
+        document.getElementById("share-button").hidden = true;
+      } else {
+        document.getElementById("content").innerHTML =
+          post.title === "It's monday AGAIN!"
+            ? mondayText(post.text)
+            : post.text
+                .map(p =>
+                  p.includes("they liked my site!")
                     ? `<p>${p.replace(
-                        "another hackclubber in the community!",
-                        rainbowPhrase("another hackclubber in the community!")
+                        "they liked my site!",
+                        rainbowPhrase("they liked my site!")
                       )}</p>`
-                  : `<p>${p}</p>`
-              )
-              .join("") +
-            (post.image
-              ? `<div class="pics">
-                   <img src="${post.image}" alt="">
-                 </div>`
-              : "");
+                    : p.includes("another hackclubber in the community!")
+                      ? `<p>${p.replace(
+                          "another hackclubber in the community!",
+                          rainbowPhrase("another hackclubber in the community!")
+                        )}</p>`
+                    : `<p>${p}</p>`
+                )
+                .join("") +
+              (post.image
+                ? `<div class="pics">
+                     <img src="${post.image}" alt="">
+                   </div>`
+                : "") +
+              (post.game
+                ? `<button class="game-launch" id="game-launch" type="button">This!</button>`
+                : "") +
+              renderPoll();
+      }
     }
+
+    attachPollEvents();
+    updatePoll();
+    window.setInterval(updatePoll, 1000);
+    window.addEventListener("storage", event => {
+      if (event.key === pollKey() && document.querySelector(".poll")) {
+        document.querySelector(".poll").outerHTML = renderPoll();
+        attachPollEvents();
+        updatePoll();
+      }
+    });
+
+    const gamePopup = document.getElementById("game-popup");
+    const gameTarget = document.getElementById("game-target");
+    const gamePercent = document.getElementById("game-percent");
+    const gameResult = document.getElementById("game-result");
+    const gameHandle = document.querySelector(".game-handle");
+    const gameBeer = document.querySelector(".game-beer");
+    let gameTargetValue = Math.floor(Math.random() * 100) + 1;
+    let gameFill = 0;
+    let gameFrame;
+    let gameLastTime;
+
+    function resetGame() {
+      gameFill = 0;
+      gameBeer.style.height = "0%";
+      gamePercent.textContent = "";
+      gameResult.textContent = "";
+      gameTargetValue = Math.floor(Math.random() * 100) + 1;
+      gameTarget.textContent = gameTargetValue;
+    }
+
+    function stopFilling() {
+      cancelAnimationFrame(gameFrame);
+      gameLastTime = undefined;
+      gamePercent.textContent = `Percent Filled: ${Math.round(gameFill)}%`;
+
+      if (gameFill === 0) return;
+      const difference = Math.abs(gameTargetValue - Math.round(gameFill));
+      gameResult.textContent = difference === 0
+        ? "Nailed it! Good job!"
+        : difference < 5
+          ? "Eh. Close enough."
+          : "You stink";
+    }
+
+    function fillMug(time) {
+      if (!gameLastTime) gameLastTime = time;
+      gameFill = Math.min(100, gameFill + (time - gameLastTime) / 100);
+      gameLastTime = time;
+      gameBeer.style.height = `${gameFill}%`;
+      if (gameFill < 100) gameFrame = requestAnimationFrame(fillMug);
+    }
+
+    if (post && post.game && !postIsLocked) {
+      document.getElementById("game-launch").addEventListener("click", () => {
+        gamePopup.hidden = false;
+        resetGame();
+      });
+
+      gameHandle.addEventListener("mouseenter", () => {
+        gameResult.textContent = "";
+        gameLastTime = undefined;
+        gameFrame = requestAnimationFrame(fillMug);
+      });
+
+      gameHandle.addEventListener("mouseleave", stopFilling);
+      document.querySelector(".game-mug").addEventListener("click", resetGame);
+    }
+
+    document.querySelectorAll("[data-close-game]").forEach(element => {
+      element.addEventListener("click", () => {
+        gamePopup.hidden = true;
+        stopFilling();
+      });
+    });
 
     const sharePopup =
       document.getElementById("share-popup");
@@ -340,6 +590,43 @@
           }
         });
       });
+
+    const siteClock = document.getElementById("site-clock");
+    const analogClock = siteClock.querySelector(".analog-clock");
+    const digitalClock = siteClock.querySelector(".digital-clock");
+    let clockMode = 0;
+
+    function updateClock() {
+      const now = new Date();
+      const seconds = now.getSeconds() + now.getMilliseconds() / 1000;
+      const minutes = now.getMinutes() + seconds / 60;
+      const hours = (now.getHours() % 12) + minutes / 60;
+
+      siteClock.querySelector(".clock-hour").style.transform = `rotate(${hours * 30}deg)`;
+      siteClock.querySelector(".clock-minute").style.transform = `rotate(${minutes * 6}deg)`;
+      siteClock.querySelector(".clock-second").style.transform = `rotate(${seconds * 6}deg)`;
+      digitalClock.textContent = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: clockMode === 1
+      });
+      window.requestAnimationFrame(updateClock);
+    }
+
+    siteClock.addEventListener("click", () => {
+      clockMode = (clockMode + 1) % 3;
+      siteClock.classList.toggle("digital-mode", clockMode !== 0);
+      siteClock.classList.toggle("military-mode", clockMode === 2);
+      analogClock.setAttribute("aria-hidden", clockMode !== 0);
+      siteClock.setAttribute("aria-label", clockMode === 0
+        ? "Switch to AM-PM clock"
+        : clockMode === 1
+          ? "Switch to military clock"
+          : "Switch to analog clock");
+    });
+
+    updateClock();
   </script>
 </body>
 </html>

@@ -5,6 +5,97 @@ body {
   color: #f5eedc;
 }
 
+.site-clock {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  padding: 0;
+  border: 2px solid #38332c;
+  border-radius: 50%;
+  background: #1e1c19;
+  color: #f5eedc;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 35%);
+}
+
+.site-clock:hover {
+  border-color: #800482;
+}
+
+.analog-clock {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border: 2px solid #d7c9a7;
+  border-radius: 50%;
+}
+
+.clock-hand {
+  position: absolute;
+  bottom: 50%;
+  left: calc(50% - 1px);
+  width: 2px;
+  border-radius: 2px;
+  background: #f5eedc;
+  transform-origin: 50% 100%;
+}
+
+.clock-hour {
+  height: 11px;
+}
+
+.clock-minute {
+  height: 16px;
+  width: 1.5px;
+}
+
+.clock-second {
+  height: 18px;
+  width: 1px;
+  background: #e04a5f;
+}
+
+.clock-center {
+  position: absolute;
+  top: calc(50% - 3px);
+  left: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e04a5f;
+}
+
+.digital-clock {
+  display: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.site-clock.digital-mode {
+  width: auto;
+  min-width: 116px;
+  padding: 0 10px;
+  border-radius: 8px;
+}
+
+.site-clock.military-mode {
+  min-width: 126px;
+}
+
+.site-clock.digital-mode .analog-clock {
+  display: none;
+}
+
+.site-clock.digital-mode .digital-clock {
+  display: block;
+}
+
 main {
   max-width: 32rem;
   margin: 40px auto;
@@ -116,6 +207,119 @@ p {
   padding: 10px;
 }
 
+.scheduled-blog {
+  position: relative;
+  overflow: hidden;
+  border-color: #63343a;
+  filter: grayscale(0.9);
+  opacity: 0.62;
+}
+
+.scheduled-blog::after {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #9d2638;
+  border-radius: 8px;
+  content: "";
+  pointer-events: none;
+}
+
+.scheduled-blog a {
+  color: #8f5960;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.scheduled-countdown {
+  position: relative;
+  z-index: 1;
+  color: #e04a5f;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.scheduled-countdown::before {
+  content: "\1F551  ";
+}
+
+.locked-post {
+  color: #e04a5f;
+  font-weight: 600;
+}
+
+.poll {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid #3a342e;
+  border-radius: 8px;
+  background: #221f1b;
+}
+
+.poll h2 {
+  margin-bottom: 6px;
+}
+
+.poll-countdown,
+.poll-total,
+.poll-count {
+  color: #a99d87;
+  font-size: 0.78rem;
+}
+
+.poll-countdown,
+.poll-total {
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.poll-options {
+  display: grid;
+  gap: 8px;
+}
+
+.poll-option {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #800482;
+  border-radius: 6px;
+  background: #1a1816;
+  color: #f5eedc;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.poll-option:hover:not(:disabled) {
+  border-color: #c04bc3;
+}
+
+.poll-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.poll-option-label {
+  font-weight: 600;
+}
+
+.poll-bar {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #38332c;
+}
+
+.poll-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #800482;
+  transition: width 200ms ease;
+}
+
 .share-button,
 .share-options button,
 .share-close {
@@ -197,6 +401,239 @@ p {
   margin: 12px 0 0;
   color: #d7c9a7;
   text-align: center;
+}
+
+.game-launch {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid #800482;
+  border-radius: 6px;
+  background: #800482;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.game-launch:hover,
+.game-close:hover {
+  background: #a30aa7;
+}
+
+.game-popup[hidden] {
+  display: none;
+}
+
+.game-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.game-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 75%);
+}
+
+.game-panel {
+  position: relative;
+  width: min(100%, 520px);
+  min-height: 520px;
+  overflow: hidden;
+  padding: 18px 24px 26px;
+  border: 2px solid #38332c;
+  border-radius: 8px;
+  background: #1e1c19;
+  box-shadow: 0 12px 35px rgb(0 0 0 / 50%);
+}
+
+.game-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #800482;
+  border-radius: 6px;
+  background: #800482;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.game-panel h1,
+.game-panel h2,
+.game-panel h3 {
+  text-align: center;
+}
+
+.game-panel h1 {
+  margin-top: 10px;
+  font-size: 2rem;
+}
+
+.game-panel h2,
+.game-panel h3 {
+  min-height: 1.3em;
+}
+
+.game-helper {
+  color: #d7c9a7;
+  text-align: center;
+}
+
+.game-tap-container,
+.game-mug-container {
+  position: absolute;
+}
+
+.game-tap-container {
+  top: 120px;
+  left: 24px;
+}
+
+.game-tap {
+  position: relative;
+  width: 120px;
+  height: 35px;
+  margin-top: 0;
+  border-radius: 5px 0 0 5px;
+  background: #ddd;
+}
+
+.game-tap::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-bottom: 70px solid #ddd;
+  border-left: 10px solid transparent;
+  border-radius: 0 0 40px 40px;
+  content: "";
+  transform: rotate(-20deg);
+  z-index: 2;
+}
+
+.game-tap::before {
+  position: absolute;
+  top: -15px;
+  left: -20px;
+  width: 70px;
+  height: 60px;
+  border-radius: 0 20px 20px 0;
+  background: grey;
+  content: "";
+}
+
+.game-handle {
+  position: absolute;
+  top: -110px;
+  left: 80px;
+  width: 20px;
+  height: 100px;
+  border-radius: 10px 10px 0 0;
+  background: #111;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.game-handle::before {
+  position: absolute;
+  bottom: -20px;
+  left: -5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 20px 20px 10px 10px;
+  background: lightgrey;
+  content: "";
+}
+
+.game-handle:hover {
+  transform: rotate(6deg);
+  transform-origin: center bottom;
+}
+
+.game-pour {
+  position: absolute;
+  top: 70px;
+  left: 92px;
+  width: 16px;
+  height: 0;
+  background: #e5c539;
+  transition: height 100ms linear;
+  z-index: 1;
+}
+
+.game-handle:hover ~ .game-pour {
+  height: 230px;
+}
+
+.game-mug-container {
+  top: 260px;
+  left: 105px;
+}
+
+.game-mug {
+  position: relative;
+  width: 120px;
+  height: 200px;
+  margin: 0;
+  border: 20px solid #eee;
+  border-top: none;
+  border-bottom-width: 30px;
+  border-radius: 0 0 10px 10px;
+  cursor: pointer;
+}
+
+.game-mug::before {
+  position: absolute;
+  bottom: -40px;
+  left: -30px;
+  width: 180px;
+  height: 30px;
+  background: #eee;
+  content: "";
+}
+
+.game-mug::after {
+  position: absolute;
+  top: 30px;
+  right: -80px;
+  width: 40px;
+  height: 110px;
+  border: 25px solid #eee;
+  border-left: none;
+  border-radius: 0 50px 150px 0;
+  content: "";
+}
+
+.game-beer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  max-height: 100%;
+  background: linear-gradient(#fff 0%, #fff 35%, #ededad 43%, #e5c539 44%, #e5c539 100%);
+}
+
+.game-mug-helper {
+  position: absolute;
+  top: 475px;
+  left: 130px;
+  width: 180px;
+  margin: 0;
 }
 
 .pics {
