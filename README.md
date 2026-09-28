@@ -18,6 +18,7 @@ A: cause ive never made anything like this before and wanted to try it
 
 ### Roadmap
 ----What will i add---
+- --games--
 - Videos
 - More games
 - More blogs
